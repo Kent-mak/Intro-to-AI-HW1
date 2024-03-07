@@ -19,7 +19,38 @@ def load_data_small():
     """
 
     # Begin your code (Part 1-1)
-    raise NotImplementedError("To be implemented")
+    path = "data/data_small"
+    test_path_nonface = path + '/test/non-face/*.pgm'
+    test_path_face = path + '/test/face/*.pgm'
+    train_path_nonface = path + '/train/non-face/*.pgm'
+    train_path_face = path + '/train/face/*.pgm'
+
+    test_set = []
+    training_set = []
+
+
+    for file in glob.glob(train_path_nonface):
+        img = cv2.imread(file)
+        tup = (img, 0)
+        training_set.append(tup)
+
+    for file in glob.glob(train_path_face):
+        img = cv2.imread(file)
+        tup = (img, 1)
+        training_set.append(tup)
+    
+    for file in glob.glob(test_path_nonface):
+        img = cv2.imread(file)
+        tup = (img, 0)
+        test_set.append(tup)
+
+    for file in glob.glob(test_path_face):
+        img = cv2.imread(file)
+        tup = (img, 1)
+        training_set.append(tup)
+
+    dataset = [training_set, test_set]
+    # raise NotImplementedError("To be implemented")
     # End your code (Part 1-1)
     
     return dataset
