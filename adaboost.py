@@ -161,7 +161,24 @@ class Adaboost:
             bestError: The error of the best classifer
         """
         # Begin your code (Part 2)
-        raise NotImplementedError("To be implemented")
+        bestClf = None
+        bestError = float('inf')
+        for feature in features:
+            clf = WeakClassifier(feature=feature)
+            error = 0
+            for i in (iis, featureVals, labels, weights):
+                (ii, val, label, w) = i
+                hypo = 1
+                if clf.polarity * val < clf.polarity * clf.threshold: 
+                    hypo = 0
+                    
+                error += w * abs(hypo - label)
+            if error < bestError:
+                bestClf = clf
+                bestError = error
+
+
+        # raise NotImplementedError("To be implemented")
         # End your code (Part 2)
         return bestClf, bestError
 
