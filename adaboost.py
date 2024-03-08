@@ -72,7 +72,7 @@ class Adaboost:
             beta = error / (1.0 - error)
             for i in range(len(accuracy)):
                 weights[i] = weights[i] * (beta ** (1 - accuracy[i]))
-            print(f"err: {error} beta: {beta}")
+            # print(f"err: {error} beta: {beta}")
             alpha = math.log(1.0 / beta)
             self.alphas.append(alpha)
             self.clfs.append(clf)
@@ -183,15 +183,12 @@ class Adaboost:
                 error = min(cur_pos_weight + total_neg_weight - cur_neg_weight,
                              cur_neg_weight + total_pos_weight - cur_pos_weight)
                 
-                if error <= 0:
-                    print(f"bE:{bestError}, E:{error}, TP:{total_pos_weight}, TN:{total_neg_weight}, P:{cur_pos_weight}, N:{cur_neg_weight}")
-                    os.system("pause")
                 
                 if error < bestError:
                     bestError = error
                     best_feature = feature
                     best_threshold = val
-                    best_polarity = 1 if cur_pos_num > cur_neg_num else -1
+                    best_polarity = 1 if cur_pos_num >= cur_neg_num else -1
                 if label == 1:
                     cur_pos_num += 1
                     cur_pos_weight += w
