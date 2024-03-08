@@ -6,6 +6,7 @@ import math
 from sklearn.feature_selection import SelectPercentile, f_classif
 import pickle
 from tqdm import tqdm
+import os
 
 
 class Adaboost:
@@ -71,6 +72,7 @@ class Adaboost:
             beta = error / (1.0 - error)
             for i in range(len(accuracy)):
                 weights[i] = weights[i] * (beta ** (1 - accuracy[i]))
+            print(f"err: {error} beta: {beta}")
             alpha = math.log(1.0 / beta)
             self.alphas.append(alpha)
             self.clfs.append(clf)
@@ -87,6 +89,7 @@ class Adaboost:
           Returns:
             A numpy array of HaarFeature class.
         """
+        # print(imageShape)
         height, width = imageShape
         features = []
         for w in range(1, width + 1):
@@ -161,22 +164,42 @@ class Adaboost:
             bestError: The error of the best classifer
         """
         # Begin your code (Part 2)
-        bestClf = None
-        bestError = float('inf')
-        for feature in features:
-            clf = WeakClassifier(feature=feature)
-            error = 0
-            for i in (iis, featureVals, labels, weights):
-                (ii, val, label, w) = i
-                hypo = 1
-                if clf.polarity * val < clf.polarity * clf.threshold: 
-                    hypo = 0
-                    
-                error += w * abs(hypo - label)
-            if error < bestError:
-                bestClf = clf
-                bestError = error
 
+        total_pos_weight ,total_neg_weight = 0, 0
+        
+        for label, w in zip(labels, weights):
+            if label == 0: 
+                total_neg_weight += w
+            elif label == 1:
+                total_pos_weight += w
+        
+        best_feature, best_threshold, best_polarity, bestError = None, None, None, float('inf')
+        for feature, vals in zip(features, featureVals):
+
+            sorted_vars = sorted(zip( weights, vals, labels), key= lambda vars: vars[1])
+            cur_pos_weight, cur_neg_weight, cur_pos_num, cur_neg_num = 0, 0, 0, 0
+
+            for w, val, label in sorted_vars:
+                error = min(cur_pos_weight + total_neg_weight - cur_neg_weight,
+                             cur_neg_weight + total_pos_weight - cur_pos_weight)
+                
+                if error <= 0:
+                    print(f"bE:{bestError}, E:{error}, TP:{total_pos_weight}, TN:{total_neg_weight}, P:{cur_pos_weight}, N:{cur_neg_weight}")
+                    os.system("pause")
+                
+                if error < bestError:
+                    bestError = error
+                    best_feature = feature
+                    best_threshold = val
+                    best_polarity = 1 if cur_pos_num > cur_neg_num else -1
+                if label == 1:
+                    cur_pos_num += 1
+                    cur_pos_weight += w
+                else:
+                    cur_neg_num += 1
+                    cur_neg_weight += w
+
+        bestClf = WeakClassifier(best_feature, best_threshold, best_polarity)
 
         # raise NotImplementedError("To be implemented")
         # End your code (Part 2)

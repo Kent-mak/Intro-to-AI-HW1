@@ -28,26 +28,26 @@ def load_data_small():
     test_set = []
     training_set = []
 
-
-    for file in glob.glob(train_path_nonface):
-        img = cv2.imread(file)
-        tup = (img, 0)
-        training_set.append(tup)
-
     for file in glob.glob(train_path_face):
-        img = cv2.imread(file)
+        img = cv2.imread(file, cv2.IMREAD_GRAYSCALE)
         tup = (img, 1)
         training_set.append(tup)
     
-    for file in glob.glob(test_path_nonface):
-        img = cv2.imread(file)
+    
+    for file in glob.glob(train_path_nonface):
+        img = cv2.imread(file, cv2.IMREAD_GRAYSCALE)
         tup = (img, 0)
-        test_set.append(tup)
+        training_set.append(tup)
 
     for file in glob.glob(test_path_face):
-        img = cv2.imread(file)
+        img = cv2.imread(file, cv2.IMREAD_GRAYSCALE)
         tup = (img, 1)
-        training_set.append(tup)
+        test_set.append(tup)
+    
+    for file in glob.glob(test_path_nonface):
+        img = cv2.imread(file, cv2.IMREAD_GRAYSCALE)
+        tup = (img, 0)
+        test_set.append(tup)
 
     dataset = [training_set, test_set]
     # raise NotImplementedError("To be implemented")
