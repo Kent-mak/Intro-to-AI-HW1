@@ -116,16 +116,29 @@ def load_data_FDDB(data_idx="01"):
         for i in range(num_faces):
             # Begin your code (Part 1-2)
             is_face = True
+            valid = False
 
-            while is_face:
-                rand_left_top = (np.random.randint(0, img_gray.shape()[1]) ,np.random.randint(0, img_gray.shape()[0]))
-                rand_right_bottom = (np.random.randint(rand_left_top[0], img_gray.shape()[0]), np.random.randint(rand_left_top[1], img_gray.shape()[1]))
+            # rand_left_top, rand_right_bottom = None, None
+            while is_face and not valid:
+                rand_left_top = (np.random.randint(0, img_gray.shape[1]) ,np.random.randint(0, img_gray.shape[0]))
+                rand_right_bottom = (np.random.randint(rand_left_top[0], img_gray.shape[1]), np.random.randint(rand_left_top[1], img_gray.shape[0]))
+                valid = True
+                if (rand_left_top[0] - rand_right_bottom[0] >= 0) or (rand_left_top[1] - rand_right_bottom[1] >= 0):
+                    # print(f"{rand_left_top[1]},{rand_left_top[0]},{rand_right_bottom[1]},{rand_right_bottom[0]}")
+                    # os.system("pause")
+                    valid = False
+                    continue
+
                 for face in face_box_list:
-                    if (rand_left_top[0] > face[0] and rand_left_top[1] < face[1]) or (rand_right_bottom[0] < face[0] and rand_left_top[1] > face[1]):
+                    if face[0][0] > rand_right_bottom[0] or rand_left_top[0] > face[1][0] or face[0][1] > rand_right_bottom[1] or rand_left_top[1] > face[1][1]:
+                        is_face = False
                         break
-                is_face = False
+                
 
-            img_crop = img_gray[left_top[0]:right_bottom[0], left_top[1]:right_bottom[1]].copy()
+            
+            # print(f"{rand_left_top[1]},{rand_left_top[0]},{rand_right_bottom[1]},{rand_right_bottom[0]}")
+            # os.system("pause") 
+            img_crop = img_gray[rand_left_top[1]:rand_right_bottom[1], rand_left_top[0]:rand_right_bottom[0]].copy()
             # raise NotImplementedError("To be implemented")
             # End your code (Part 1-2)
 
