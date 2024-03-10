@@ -48,6 +48,7 @@ def detect(dataPath, clf):
     
     cv2.imshow(file ,img_color)
     cv2.waitKey()
+    cv2.destroyWindow(file)
     print("show Image")       
     i += num_faces + 1
 
