@@ -6,7 +6,8 @@ import math
 from sklearn.feature_selection import SelectPercentile, f_classif
 import pickle
 from tqdm import tqdm
-import os
+import math
+
 
 
 class Adaboost:
@@ -164,6 +165,20 @@ class Adaboost:
             bestError: The error of the best classifer
         """
         # Begin your code (Part 2)
+        '''
+        Each weak classifier corresponds to a feature, with the feature value of a sample as its threshold, polarity determining each side's classification.
+        therefore to find the weak classifier with lowest error, we define error as:
+        min(total weight of positive samples below this threshold + total weight of negative samples - total weight of negative samples below this threshold,
+            total weight of negative samples below this threshold + total weight of positive samples - total weight of positive samples below this threshold)
+        To easily perform this task, for each feature:
+        1. sort all samples(weight and label) by ascending order of feature value
+        2. for each sample from the start, caculate error as
+           min(total weight of positive samples already seen + total weight of negative samples - total weight of negative samples already seen,
+               total weight of negative samples already seen + total weight ofpositive samples - total weight of positive samples already seen )
+        3. update the lowest error, threshold, polarity(1 if number of positive samples seen is greater than number of negative samples, -1 if otherwise),
+           and the feature with lowest error, if the current error is lower than the previously lowest error
+        4. create a weak classifier instance according to the recorded threshold, polarity, and feature
+        '''
 
         total_pos_weight ,total_neg_weight = 0, 0
         
@@ -180,6 +195,7 @@ class Adaboost:
             cur_pos_weight, cur_neg_weight, cur_pos_num, cur_neg_num = 0, 0, 0, 0
 
             for w, val, label in sorted_vars:
+
                 error = min(cur_pos_weight + total_neg_weight - cur_neg_weight,
                              cur_neg_weight + total_pos_weight - cur_pos_weight)
                 
@@ -200,6 +216,14 @@ class Adaboost:
 
         # raise NotImplementedError("To be implemented")
         # End your code (Part 2)
+
+        #start part 6
+
+        
+
+        #end part 6
+
+
         return bestClf, bestError
 
     def classify(self, image):

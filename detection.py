@@ -19,6 +19,18 @@ def detect(dataPath, clf):
       No returns.
   """
   # Begin your code (Part 4)
+  '''
+  convert each line in the file into lists of elements 
+  for each image: 
+    read image in both grayscale and color
+    read the name of the file and number of faces num_faces on the first line,
+    the next num_faces lines are of format (x of left top coordinate, y of left top coordinate, width, height)
+    crop regions read from each line from the grayscale image
+    classify them, and draw green rectangles if classification is 1 and red if it is 0, on the colored image
+    display the modified image
+
+  '''
+
   with open(dataPath) as file:
     lines = [line.rstrip() for line in file] 
   
@@ -48,12 +60,8 @@ def detect(dataPath, clf):
     
     cv2.imshow(file ,img_color)
     cv2.waitKey()
-    cv2.destroyWindow(file)
-    print("show Image")       
+    cv2.destroyWindow(file)      
     i += num_faces + 1
-
-
-
       
   # raise NotImplementedError("To be implemented")
   # End your code (Part 4)

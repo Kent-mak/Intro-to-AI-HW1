@@ -36,7 +36,7 @@ def main(args):
     # Part 3: Modify difference values at parameter T of the Adaboost algorithm.
     # And find better results. Please test value 1~10 at least.
     # print('Start training your classifier')
-    clf = adaboost.Adaboost(T=10)
+    clf = adaboost.Adaboost(T=2)
     clf.train(trainData)
 
     clf.save('clf_200_1_10')

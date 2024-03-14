@@ -19,6 +19,11 @@ def load_data_small():
     """
 
     # Begin your code (Part 1-1)
+    '''
+    1. Read all images from each folder in grayscale
+    2. For images from "face" folders, label 1. For Images from "non-face" folders, label 0
+    3. return list with first and second element as the training and testing dataset respectively
+    '''
     path = "data/data_small"
     test_path_nonface = path + '/test/non-face/*.pgm'
     test_path_face = path + '/test/face/*.pgm'
@@ -115,6 +120,12 @@ def load_data_FDDB(data_idx="01"):
         # Note that we have alreadly save the bounding box of faces into `face_box_list`, you can utilize it for non-face region cropping
         for i in range(num_faces):
             # Begin your code (Part 1-2)
+            '''
+            for num_faces iterations:
+                continue to generate random croppings of the image until the area doesn't overlap any of the faces.
+                Implemented by generating a random top left coordinate and a random bottom right coordinate which has greater x and y values
+                then check if it overlaps and of the areas in face_box_list and if it's area is grater than 0
+            '''
             is_face = True
             valid = False
 
@@ -124,8 +135,6 @@ def load_data_FDDB(data_idx="01"):
                 rand_right_bottom = (np.random.randint(rand_left_top[0], img_gray.shape[1]), np.random.randint(rand_left_top[1], img_gray.shape[0]))
                 valid = True
                 if (rand_left_top[0] - rand_right_bottom[0] >= 0) or (rand_left_top[1] - rand_right_bottom[1] >= 0):
-                    # print(f"{rand_left_top[1]},{rand_left_top[0]},{rand_right_bottom[1]},{rand_right_bottom[0]}")
-                    # os.system("pause")
                     valid = False
                     continue
 
@@ -133,11 +142,7 @@ def load_data_FDDB(data_idx="01"):
                     if face[0][0] > rand_right_bottom[0] or rand_left_top[0] > face[1][0] or face[0][1] > rand_right_bottom[1] or rand_left_top[1] > face[1][1]:
                         is_face = False
                         break
-                
 
-            
-            # print(f"{rand_left_top[1]},{rand_left_top[0]},{rand_right_bottom[1]},{rand_right_bottom[0]}")
-            # os.system("pause") 
             img_crop = img_gray[rand_left_top[1]:rand_right_bottom[1], rand_left_top[0]:rand_right_bottom[0]].copy()
             # raise NotImplementedError("To be implemented")
             # End your code (Part 1-2)
