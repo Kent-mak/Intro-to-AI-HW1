@@ -217,11 +217,28 @@ class Adaboost:
         # raise NotImplementedError("To be implemented")
         # End your code (Part 2)
 
-        #start part 6
+        # #start part 6
+        # '''
+        # Instead of finding the best threshold for each feature,
+        #   I set all threshold to 0 to see how much selection of threshold affects performance
+        # '''
 
+        # col, row=featureVals.shape
+        # bestClf, bestError=None, float('inf')
+
+        # for vals, feature in zip(featureVals, features):
+        #     error=0
+
+        #     for val, y, w in zip(vals, labels, weights):
+        #         if (val < 0 and y==0) or (val >= 0 and y == 1):
+        #             error += w
+
+        #     if error < bestError:
+        #         bestError = error
+        #         bestClf=WeakClassifier(feature)
         
 
-        #end part 6
+        # #end part 6
 
 
         return bestClf, bestError
